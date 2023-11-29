@@ -1,20 +1,27 @@
 package com.example.cmpt365_project3;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AC_Controller {
     @FXML
     private TextField userInput;
+    @FXML
+    private Button resetButton;
     @FXML
     private Button enterButton;
     @FXML
@@ -44,21 +51,20 @@ public class AC_Controller {
         private String input;
         private double upperBound;
         private double lowerBound;
-
         public Data(String input, double upperBound, double lowerBound) {
             this.input = input;
             this.upperBound = upperBound;
             this.lowerBound = lowerBound;
         }
-        public String getInput() {
-            return input;
-        }
-        public double getUpperBound() {
-            return upperBound;
-        }
-        public double getLowerBound() {
-            return lowerBound;
-        }
+    }
+    @FXML
+    public void reset() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("ArithmeticCodingScreen.fxml"));
+        Stage stage = (Stage) openFileButton.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Arithmetic Coding");
+        stage.setScene(scene);
+        stage.show();
     }
     public double[] getBounds(String string) {
         double[] bounds = new double[2];
@@ -107,6 +113,7 @@ public class AC_Controller {
         lowerBound.setVisible(true);
         openFileButton.setVisible(false);
         openLabel.setVisible(false);
+        resetButton.setVisible(true);
     }
     @FXML
     public void openFileClicked() throws FileNotFoundException {
@@ -138,6 +145,7 @@ public class AC_Controller {
             openFileButton.setVisible(false);
             results.setVisible(true);
             results.setEditable(false);
+            resetButton.setVisible(true);
         }
     }
 }
