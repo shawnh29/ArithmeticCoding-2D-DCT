@@ -43,20 +43,47 @@ public class DCT_Controller {
         double[][] intermediate = new double[n][n];
         int[][] result = new int[n][n];
 
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<n; j++) {
-                for (int k=0; k<n; k++) {
-                    intermediate[i][j] += t_matrix[i][k] * originalMatrix[k][j];
+        double i, j;
+        double dct, sum;
+        for (int k=0; k<n; k++) {
+            for (int l=0; l<n; l++) {
+                double j1 = Math.sqrt(2) / Math.sqrt(n);
+                if (k == 0) {
+                    i = Math.sqrt(1.0/n);
+                } else {
+                    i = j1;
                 }
+                if (l == 0) {
+                    j = Math.sqrt(1.0/n);
+                } else {
+                    j = j1;
+                }
+                sum = 0;
+                for (int x=0; x<n; x++) {
+                    for (int y=0; y<n; y++) {
+                        double u = Math.cos((2 * x + 1) * k * Math.PI / (2 * n));
+                        double v = Math.cos((2 * y + 1) * l * Math.PI / (2 * n));
+                        dct = originalMatrix[x][y] * u * v;
+                        sum += dct;
+                    }
+                }
+                result[k][l] = (int) Math.round(sum * i * j);
             }
         }
-        for (int i=0; i<n; i++) {
-            for (int j=0; j<n; j++) {
-                for (int k=0; k<n; k++) {
-                    result[i][j] += (int) Math.round(intermediate[i][k] * t_matrix_trans[k][j]);
-                }
-            }
-        }
+//        for (int i=0; i<n; i++) {
+//            for (int j=0; j<n; j++) {
+//                for (int k=0; k<n; k++) {
+//                    intermediate[i][j] += t_matrix[i][k] * originalMatrix[k][j];
+//                }
+//            }
+//        }
+//        for (int i=0; i<n; i++) {
+//            for (int j=0; j<n; j++) {
+//                for (int k=0; k<n; k++) {
+//                    result[i][j] += (int) Math.round(intermediate[i][k] * t_matrix_trans[k][j]);
+//                }
+//            }
+//        }
         return result;
     }
     @FXML
