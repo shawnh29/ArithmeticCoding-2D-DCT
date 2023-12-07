@@ -7,7 +7,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class DCT_Controller {
@@ -24,35 +23,46 @@ public class DCT_Controller {
         int n = originalMatrix.length;
         int[][] result = new int[n][n];
 
-        double i, j;
-        double dct, sum;
+        double a, b;
+        double res, sum;
         for (int k=0; k<n; k++) {
             for (int l=0; l<n; l++) {
                 double j1 = Math.sqrt(2) / Math.sqrt(n);
                 if (k == 0) {
-                    i = Math.sqrt(1.0/n);
+                    a = Math.sqrt(1.0/n);
                 } else {
-                    i = j1;
+                    a = j1;
                 }
                 if (l == 0) {
-                    j = Math.sqrt(1.0/n);
+                    b = Math.sqrt(1.0/n);
                 } else {
-                    j = j1;
+                    b = j1;
                 }
                 sum = 0;
-                for (int x=0; x<n; x++) {
-                    for (int y=0; y<n; y++) {
-                        double u = Math.cos((2 * x + 1) * k * Math.PI / (2 * n));
-                        double v = Math.cos((2 * y + 1) * l * Math.PI / (2 * n));
-                        if (rowFirst) {
-                            dct = originalMatrix[x][y] * u * v;
-                        } else {
-                            dct = originalMatrix[y][x] * u * v;
+                double u = 0.0;
+                double v = 0.0;
+                if (rowFirst) {
+                    // row first order
+                    for (int x=0; x<n; x++) {
+                        for (int y=0; y<n; y++) {
+                            u = Math.cos((2 * x + 1) * k * Math.PI / (2 * n));
+                            v = Math.cos((2 * y + 1) * l * Math.PI / (2 * n));
+                            res = originalMatrix[x][y] * u * v;
+                            sum += res;
                         }
-                        sum += dct;
+                    }
+                } else {
+                    // column first order
+                    for (int y=0; y<n; y++) {
+                        for (int x=0; x<n; x++) {
+                            u = Math.cos((2 * x + 1) * k * Math.PI / (2 * n));
+                            v = Math.cos((2 * y + 1) * l * Math.PI / (2 * n));
+                            res = originalMatrix[x][y] * u * v;
+                            sum += res;
+                        }
                     }
                 }
-                result[k][l] = (int) Math.round(sum * i * j);
+                result[k][l] = (int) Math.round(sum * a * b);
             }
         }
         return result;
@@ -116,7 +126,6 @@ public class DCT_Controller {
                     originalMatrix[i][j] = scanner.nextInt();
                 }
             }
-            // Do the DCT transforming
 //            double[][] transformMatrix = get_T_matrix(n);
 //            System.out.println(Arrays.deepToString(transformMatrix));
 //            double[][] transposed_t_matrix = new double[n][n];
@@ -126,6 +135,7 @@ public class DCT_Controller {
 //                }
 //            }
 //            int[][] resultMatrix = getDCT_Matrix(transformMatrix, originalMatrix, transposed_t_matrix);
+            // Do the DCT transforming
             int [][] resultMatrixRow = getResult(originalMatrix, true);
             int [][] resultMatrixCol = getResult(originalMatrix, false);
             leftLabel.setVisible(true);
